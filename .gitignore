@@ -28,8 +28,8 @@ drafts/draft_bp.pdf
 /.venv/*
 
 # Sphinx build files
-_docs/
-docs/
+# _docs/
+# docs/
 
 ##############
 #Excluded PDFs
@@ -100,9 +100,7 @@ coverage.xml
 # Django stuff:
 *.log
 
-# Sphinx documentation
-# docs/
-/docs_src/apidocs
+
 
 
 # PyBuilder

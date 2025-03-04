@@ -75,33 +75,37 @@ def sql_query(secid=108105, year=1996, start="1996-01-01", end="2012-01-31"):
     # data based on the following conditions: secid, start date, end date,
     # am_settlement = 0 (meaning these are EOD options (not AM settlement))
 
-    sql_query = f"""
+    sql_query = f""" 
         SELECT 
-            a.secid, 
-            a.optionid, 
-            a.date, 
-            a.exdate, 
-            a.last_date, 
+            a.secid,
+            a.optionid,
+            a.date,
+            a.exdate,
+            a.last_date,
             a.cp_flag,
-            a.strike_price, 
-            -- please fill in this query with the rest of the required columns.
-            -- These columns include the best bid, best offer, volume, implied volatility, delta, gamma, theta, vega, contract size, and amsettlement.
-            # TODO: YOUR CODE HERE
-            b.amsettlement, 
-            b.forwardprice, 
-            optionm_all.opprcd{year} AS a 
-        JOIN 
-            optionm_all.fwdprd{year} AS b 
-        ON 
-            a.secid = b.secid AND 
-            a.date = b.date AND 
-            a.exdate = b.expiration
-        WHERE
-            (a.secid = \'{secid}\') AND (\'{start}\' <= a.date) AND 
-            (a.date <= \'{end}\') AND (a.am_settlement = 0) 
-            AND (b.amsettlement = 0)
+            a.strike_price,
+            a.best_bid,
+            a.best_offer,
+            a.volume,
+            a.impl_volatility,
+            a.delta,
+            a.gamma,
+            a.theta,
+            a.vega,
+            a.contract_size,
+            b.amsettlement       AS amsettlement,
+            b.forwardprice       AS forwardprice,
+            b.expiration         AS expiration
+        FROM optionm_all.opprcd{year} AS a
+        JOIN optionm_all.fwdprd{year} AS b
+            ON a.secid = b.secid
+           AND a.date = b.date
+           AND a.exdate = b.expiration
+        WHERE a.secid = {secid}
+          AND a.date BETWEEN '{start}' AND '{end}'
+          AND a.am_settlement = 0
+          AND b.amsettlement  = 0
     """
-
     return sql_query
 
 
